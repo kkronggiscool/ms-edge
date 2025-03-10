@@ -1,8 +1,16 @@
+local Main_Game = require(game.Players.LocalPlayer.PlayerGui:FindFirstChild("MainUI"):FindFirstChild("Initiator"):FindFirstChild("Main_Game"))
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local PlayerSpeed = 16
 _G.isFullBrightEnabled = false
 local IsInstantInteractEnabled = false
 local IsRemoveAllGatesEnabled = false
+
+if not Main_Game then
+    warn("Main_Game module not found.")
+    return
+else
+    print("Main_Game module has been found successfully!")
+end
 
 local Window = Rayfield:CreateWindow({
     Name = "msedge",

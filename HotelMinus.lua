@@ -105,7 +105,7 @@ Rayfield:Notify({
     Title = "Window loaded",
     Content = "Main window has been loaded successfully",
     Duration = 10,
-    Image = "check",
+    Image = 4483362458,
 })
 
 local General = Window:CreateTab("General", "gamepad-2")
@@ -167,7 +167,7 @@ local RemoveGatesToggle = General:CreateToggle({
 
 local Visuals = Window:CreateTab("Visuals", "eye")
 local FOVSlider =  = Visuals:CreateSlider({
-    Name = "Field Of View",
+    Name = "FOV",
     Range = {70, 120},
     Increment = 1,
     Suffix = "FOV",
@@ -201,7 +201,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
         player.Character.Humanoid.WalkSpeed = PlayerSpeed
     end
 
-    local Camera = game.workspace.CurrentCamera
+    local Camera = game.Workspace.CurrentCamera
     if Camera.CameraType == Enum.CameraType.Scriptable then
         Camera.CameraType = Enum.CameraType.Custom
     end

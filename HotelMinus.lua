@@ -157,7 +157,7 @@ local RemoveGatesToggle = General:CreateToggle({
         -- Using Debris to safely destroy gates and models
         local DebrisService = game:GetService("Debris")
         for i, v in pairs(game.Workspace:GetDescendants()) do
-            if v:IsA("Model") and (v.Name == "Gate" or v.Name == "VentGate" or v.Name == "MovingDoor" or v.Name == "FireplaceBottom") then
+            if v:IsA("Model") and (v.Name == "Gate" or v.Name == "VentGrate" or v.Name == "MovingDoor" or v.Name == "FireplaceBottom") then
                 -- Add objects to Debris for automatic removal after a brief time
                 v:Destroy() -- Remove the object immediately
                 DebrisService:AddItem(v, 0) -- No delay, just remove it from the workspace
@@ -166,16 +166,19 @@ local RemoveGatesToggle = General:CreateToggle({
     end,
 })
 
-local FOVSlider = Visuals:CreateSlider({
+local FOVInp = Visuals:CreateInput({
     Name = "FOV",
-    Range = {0, 120},
-    Increment = 1,
-    Suffix = "FOV",
-    CurrentValue = 70,
-    Flag = "Fieldofv1",
-    Callback = function(FOVValue)
-        FieldOfViewVal = FOVValue
-    end,
+    CurrentValue = "70",
+    PlaceholderText = "70",
+    RemoveTextAfterFocusLost = true,
+    Flag = "FOVInput1",
+    Callback = function(num)
+        if not tonumber(num) then
+            warn("not a number")
+        else
+            FieldOfViewVal = num
+        end
+    end
 })
 
 game.Workspace.DescendantAdded:Connect(function(des)
@@ -186,7 +189,7 @@ game.Workspace.DescendantAdded:Connect(function(des)
     end
 
     if IsRemoveAllGatesEnabled == true then
-        if des:IsA("Model") and (des.Name == "Gate" or des.Name == "VentGate" or des.Name == "MovingDoor" or des.Name == "FireplaceBottom") then
+        if des:IsA("Model") and (des.Name == "Gate" or des.Name == "VentGrate" or des.Name == "MovingDoor" or des.Name == "FireplaceBottom") then
             -- Use Debris to clean up gates when they are added
             local DebrisService = game:GetService("Debris")
             DebrisService:AddItem(des, 0) -- Immediately remove from workspace
@@ -197,12 +200,19 @@ end)
 
 game:GetService("RunService").Heartbeat:Connect(function()
     local player = game.Players.LocalPlayer
+    
+    -- Check if the player and humanoid exist
     if player and player.Character and player.Character:FindFirstChild("Humanoid") then
         player.Character.Humanoid.WalkSpeed = PlayerSpeed
     end
 
+    -- Camera settings, set only if needed
     local Camera = game.Workspace.CurrentCamera
-    Camera.CameraType = Enum.CameraType.Custom
+    if Camera.CameraType ~= Enum.CameraType.Custom then
+        Camera.CameraType = Enum.CameraType.Custom
+    end
+    
+    -- Set the FieldOfView (if it needs to be updated)
     Camera.FieldOfView = FieldOfViewVal
 end)
 

@@ -165,6 +165,19 @@ local RemoveGatesToggle = General:CreateToggle({
     end,
 })
 
+local Visuals = Window:CreateTab("Visuals", "eye")
+local FOVSlider =  = Visuals:CreateSlider({
+    Name = "Field Of View",
+    Range = {70, 120},
+    Increment = 1,
+    Suffix = "FOV",
+    CurrentValue = 70
+    Flag = "FOV1",
+    Callback = function(FIELDOFV)
+        FieldOfViewVal = FIELDOFV
+    end,
+})
+
 game.Workspace.DescendantAdded:Connect(function(des)
     if IsInstantInteractEnabled == true then
         if des:IsA("ProximityPrompt") then
@@ -181,19 +194,6 @@ game.Workspace.DescendantAdded:Connect(function(des)
         end        
     end
 end)
-
-local Visuals = Window:CreateTab("Visuals", "eye")
-local FOVSlider =  = Visuals:CreateSlider({
-    Name = "Field Of View",
-    Range = {70, 120},
-    Increment = 1,
-    Suffix = "FOV",
-    CurrentValue = 70
-    Flag = "FOV1",
-    Callback = function(FIELDOFV)
-        FieldOfViewVal = FIELDOFV
-    end,
-})
 
 game:GetService("RunService").Heartbeat:Connect(function()
     local player = game.Players.LocalPlayer

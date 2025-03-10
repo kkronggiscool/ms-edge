@@ -168,7 +168,7 @@ local RemoveGatesToggle = General:CreateToggle({
 
 local FOVSlider = Visuals:CreateSlider({
     Name = "FOV",
-    Range = {70, 120},
+    Range = {0, 120},
     Increment = 1,
     Suffix = "FOV",
     CurrentValue = 70,
@@ -202,10 +202,8 @@ game:GetService("RunService").Heartbeat:Connect(function()
     end
 
     local Camera = game.Workspace.CurrentCamera
-    if Camera.CameraType == Enum.CameraType.Scriptable then
-        Camera.CameraType = Enum.CameraType.Custom
-        Camera.FieldOfView = FieldOfViewVal
-    end
+    Camera.CameraType = Enum.CameraType.Custom
+    Camera.FieldOfView = FieldOfViewVal
 end)
 
 game.Players.LocalPlayer.Character.Humanoid.HealthChanged:Connect(function()

@@ -3,7 +3,7 @@ local PlayerSpeed = 16
 _G.isFullBrightEnabled = false
 local IsInstantInteractEnabled = false
 local IsRemoveAllGatesEnabled = false
-local FieldOfView = 70
+local FieldOfViewVal = 70
 
 local Window = Rayfield:CreateWindow({
     Name = "msedge",
@@ -205,7 +205,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
     if Camera.CameraType == Enum.CameraType.Scriptable then
         Camera.CameraType = Enum.CameraType.Custom
 
-        Camera.FieldOfView = FieldOfView
+        Camera.FieldOfView = FieldOfViewVal
     end
 end)
 

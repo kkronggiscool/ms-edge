@@ -1,16 +1,9 @@
-local Main_Game = require(game.Players.LocalPlayer.PlayerGui:FindFirstChild("MainUI"):FindFirstChild("Initiator"):FindFirstChild("Main_Game"))
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local PlayerSpeed = 16
 _G.isFullBrightEnabled = false
 local IsInstantInteractEnabled = false
 local IsRemoveAllGatesEnabled = false
-
-if not Main_Game then
-    warn("Main_Game module not found.")
-    return
-else
-    print("Main_Game module has been found successfully!")
-end
+local FieldOfView = 70
 
 local Window = Rayfield:CreateWindow({
     Name = "msedge",
@@ -189,10 +182,30 @@ game.Workspace.DescendantAdded:Connect(function(des)
     end
 end)
 
+local Visuals = Window:CreateTab("Visuals", "eye")
+local FOVSlider =  = Visuals:CreateSlider({
+    Name = "Field Of View",
+    Range = {70, 120},
+    Increment = 1,
+    Suffix = "FOV",
+    CurrentValue = 70
+    Flag = "FOV1",
+    Callback = function(FIELDOFV)
+        FieldOfView = FIELDOFV
+    end,
+})
+
 game:GetService("RunService").Heartbeat:Connect(function()
     local player = game.Players.LocalPlayer
     if player and player.Character and player.Character:FindFirstChild("Humanoid") then
         player.Character.Humanoid.WalkSpeed = PlayerSpeed
+    end
+
+    local Camera = game.workspace.CurrentCamera
+    if Camera.CameraType == Enum.CameraType.Scriptable then
+        Camera.CameraType = Enum.CameraType.Custom
+
+        Camera.FieldOfView = FieldOfView
     end
 end)
 

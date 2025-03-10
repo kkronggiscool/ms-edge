@@ -1,8 +1,16 @@
+local Main_Game = require(game.Players.LocalPlayer.PlayerGui:FindFirstChild("MainUI"):FindFirstChild("Initiator"):FindFirstChild("Main_Game"))
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local PlayerSpeed = 16
 _G.isFullBrightEnabled = false
 local IsInstantInteractEnabled = false
 local IsRemoveAllGatesEnabled = false
+
+if not Main_Game then
+    warn("Main_Game module not found.")
+    return
+else
+    print("Main_Game module has been found successfully!")
+end
 
 local Window = Rayfield:CreateWindow({
     Name = "msedge",
@@ -103,8 +111,8 @@ end
 Rayfield:Notify({
     Title = "Window loaded",
     Content = "Main window has been loaded successfully",
-    Duration = 3,
-    Image = 4483362458,
+    Duration = 10,
+    Image = "check",
 })
 
 local General = Window:CreateTab("General", "gamepad-2")
@@ -152,9 +160,13 @@ local RemoveGatesToggle = General:CreateToggle({
     Callback = function(bool)
         IsRemoveAllGatesEnabled = bool
 
+        -- Using Debris to safely destroy gates and models
+        local DebrisService = game:GetService("Debris")
         for i, v in pairs(game.Workspace:GetDescendants()) do
-            if v:IsA("Model") and (v.Name == "Gate" or v.Name == "VentGate" or v.Name == "FireplaceBottom") then
-                v:Destroy()
+            if v:IsA("Model") and (v.Name == "Gate" or v.Name == "VentGate" or v.Name == "MovingDoor" or v.Name == "FireplaceBottom") then
+                -- Add objects to Debris for automatic removal after a brief time
+                v:Destroy() -- Remove the object immediately
+                DebrisService:AddItem(v, 0) -- No delay, just remove it from the workspace
             end
         end        
     end,
@@ -168,7 +180,10 @@ game.Workspace.DescendantAdded:Connect(function(des)
     end
 
     if IsRemoveAllGatesEnabled == true then
-        if des:IsA("Model") and (des.Name == "Gate" or des.Name == "VentGate" or des.Name == "FireplaceBottom") then
+        if des:IsA("Model") and (des.Name == "Gate" or des.Name == "VentGate" or des.Name == "MovingDoor" or des.Name == "FireplaceBottom") then
+            -- Use Debris to clean up gates when they are added
+            local DebrisService = game:GetService("Debris")
+            DebrisService:AddItem(des, 0) -- Immediately remove from workspace
             des:Destroy()
         end        
     end

@@ -111,8 +111,8 @@ end
 Rayfield:Notify({
     Title = "Window loaded",
     Content = "Main window has been loaded successfully",
-    Duration = 3,
-    Image = 4483362458,
+    Duration = 10,
+    Image = "check",
 })
 
 local General = Window:CreateTab("General", "gamepad-2")

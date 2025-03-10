@@ -109,6 +109,7 @@ Rayfield:Notify({
 })
 
 local General = Window:CreateTab("General", "gamepad-2")
+local Visuals = Window:CreateTab("Visuals", "eye")
 local SpeedSlider = General:CreateSlider({
     Name = "Speed",
     Range = {0, 100},
@@ -165,16 +166,15 @@ local RemoveGatesToggle = General:CreateToggle({
     end,
 })
 
-local Visuals = Window:CreateTab("Visuals", "eye")
-local FOVSlider =  = Visuals:CreateSlider({
+local FOVSlider = Visuals:CreateSlider({
     Name = "FOV",
     Range = {70, 120},
     Increment = 1,
     Suffix = "FOV",
-    CurrentValue = 70
-    Flag = "FOV1",
-    Callback = function(FIELDOFV)
-        FieldOfViewVal = FIELDOFV
+    CurrentValue = 70,
+    Flag = "Fieldofv1",
+    Callback = function(FOVValue)
+        FieldOfViewVal = FOVValue
     end,
 })
 
@@ -204,10 +204,8 @@ game:GetService("RunService").Heartbeat:Connect(function()
     local Camera = game.Workspace.CurrentCamera
     if Camera.CameraType == Enum.CameraType.Scriptable then
         Camera.CameraType = Enum.CameraType.Custom
+        Camera.FieldOfView = FieldOfViewVal
     end
-
-    -- Update Field of View based on the value from the slider
-    Camera.FieldOfView = FieldOfViewVal
 end)
 
 game.Players.LocalPlayer.Character.Humanoid.HealthChanged:Connect(function()

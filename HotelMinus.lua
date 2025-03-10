@@ -191,7 +191,7 @@ local FOVSlider =  = Visuals:CreateSlider({
     CurrentValue = 70
     Flag = "FOV1",
     Callback = function(FIELDOFV)
-        FieldOfView = FIELDOFV
+        FieldOfViewVal = FIELDOFV
     end,
 })
 
@@ -204,9 +204,10 @@ game:GetService("RunService").Heartbeat:Connect(function()
     local Camera = game.workspace.CurrentCamera
     if Camera.CameraType == Enum.CameraType.Scriptable then
         Camera.CameraType = Enum.CameraType.Custom
-
-        Camera.FieldOfView = FieldOfViewVal
     end
+
+    -- Update Field of View based on the value from the slider
+    Camera.FieldOfView = FieldOfViewVal
 end)
 
 game.Players.LocalPlayer.Character.Humanoid.HealthChanged:Connect(function()

@@ -222,34 +222,31 @@ local AutoInteract = General:CreateToggle({
     Callback = function(bool)
         if bool == true then
             task.spawn(function()
-                while bool == true do
+                while AutoInteract.CurrentValue do
                     local camera = game.Workspace.CurrentCamera
-                    for _, prompt in pairs(game:GetService("Workspace"):GetDescendants()) do
-                        if prompt:IsA("ProximityPrompt") then
-                            -- Get the parent of the ProximityPrompt
+                    for _, prompt in ipairs(workspace:GetDescendants()) do
+                        if prompt:IsA("ProximityPrompt") and prompt.Enabled then
                             local parent = prompt.Parent
                             local position = nil
                             
-                            -- If the parent is a model, check if it has a PrimaryPart
+                            -- Check if the parent is a Model with a PrimaryPart or a BasePart directly
                             if parent:IsA("Model") and parent.PrimaryPart then
                                 position = parent.PrimaryPart.Position
                             elseif parent:IsA("BasePart") then
                                 position = parent.Position
                             end
-
-                            -- If the position was found and the prompt is visible in the camera
+                            
+                            -- Trigger prompt if it's visible on the screen
                             if position and camera:WorldToViewportPoint(position).Z > 0 then
                                 pcall(function()
-                                    if prompt.Enabled then
-                                        prompt:InputHoldBegin()
-                                        task.wait(0.05)
-                                        prompt:InputHoldEnd()
-                                    end
+                                    prompt:InputHoldBegin()
+                                    task.wait(0.01)  -- Reduced delay for faster interaction
+                                    prompt:InputHoldEnd()
                                 end)
                             end
                         end
                     end
-                    task.wait(0.05)
+                    task.wait(0.01)  -- Faster scanning of the workspace
                 end
             end)
         end

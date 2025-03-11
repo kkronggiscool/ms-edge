@@ -225,14 +225,28 @@ local AutoInteract = General:CreateToggle({
                 while bool == true do
                     local camera = game.Workspace.CurrentCamera
                     for _, prompt in pairs(game:GetService("Workspace"):GetDescendants()) do
-                        if prompt:IsA("ProximityPrompt") and camera:WorldToViewportPoint(prompt.Parent.Position).Z > 0 then
-                            pcall(function()
-                                if prompt.Enabled then
-                                    prompt:InputHoldBegin()
-                                    task.wait(0.05)
-                                    prompt:InputHoldEnd()
-                                end
-                            end)
+                        if prompt:IsA("ProximityPrompt") then
+                            -- Get the parent of the ProximityPrompt
+                            local parent = prompt.Parent
+                            local position = nil
+                            
+                            -- If the parent is a model, check if it has a PrimaryPart
+                            if parent:IsA("Model") and parent.PrimaryPart then
+                                position = parent.PrimaryPart.Position
+                            elseif parent:IsA("BasePart") then
+                                position = parent.Position
+                            end
+
+                            -- If the position was found and the prompt is visible in the camera
+                            if position and camera:WorldToViewportPoint(position).Z > 0 then
+                                pcall(function()
+                                    if prompt.Enabled then
+                                        prompt:InputHoldBegin()
+                                        task.wait(0.05)
+                                        prompt:InputHoldEnd()
+                                    end
+                                end)
+                            end
                         end
                     end
                     task.wait(0.05)

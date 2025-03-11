@@ -5,6 +5,11 @@ local IsInstantInteractEnabled = false
 local IsRemoveAllGatesEnabled = false
 local FieldOfViewVal = 70
 local camera = workspace.CurrentCamera
+local player = game.Players.LocalPlayer
+local camera = workspace.CurrentCamera
+local interactDistance = 10  -- Adjust as needed
+local interactionDelay = 0.05 -- Adjust delay between interactions
+local IsAutoInteractEnabled = false
 
 local function maintainCamera()
     -- Ensure the camera is in 'Custom' and adjust FOV
@@ -115,6 +120,25 @@ local function toggleFullBright(enabled)
     end
 end
 
+function findProximityPrompt()
+    local ray = Ray.new(camera.CFrame.Position, camera.CFrame.LookVector * interactDistance)
+    local part, position = workspace:FindPartOnRay(ray, player.Character)
+
+    if part then
+        local prompt = part:FindFirstChildWhichIsA("ProximityPrompt", true)
+        if prompt then
+            return prompt
+        end
+    end
+    return nil
+end
+
+function interactWithPrompt(prompt)
+    if prompt and prompt.HoldDuration == 0 then
+        fireproximityprompt(prompt)
+    end
+end
+
 Rayfield:Notify({
     Title = "Window loaded",
     Content = "Main window has been loaded successfully",
@@ -196,6 +220,15 @@ local FOVInp = Visuals:CreateInput({
     end
 })
 
+local AutoInteractToggle = General:CreateToggle({
+    Name = "Auto Interact",
+    CurrentValue = false,
+    Flag = "AITOGGLE",
+    Callback = function(bool)
+        IsAutoInteractEnabled = bool
+    end,
+})
+
 game.Workspace.DescendantAdded:Connect(function(des)
     if IsInstantInteractEnabled == true then
         if des:IsA("ProximityPrompt") then
@@ -229,3 +262,12 @@ end)
 -- Start monitoring lighting changes
 monitorLighting()
 maintainCamera()
+
+while task.wait(interactionDelay) do
+    if IsAutoInteractEnabled then
+        local prompt = findProximityPrompt()
+        if prompt then
+            interactWithPrompt(prompt)
+        end
+    end
+end

@@ -7,9 +7,7 @@ local FieldOfViewVal = 70
 local camera = workspace.CurrentCamera
 local player = game.Players.LocalPlayer
 local camera = workspace.CurrentCamera
-local interactDistance = 10  -- Adjust as needed
-local interactionDelay = 0.05 -- Adjust delay between interactions
-local IsAutoInteractEnabled = false
+local InteractThruWallsEnabled = false
 
 local function maintainCamera()
     -- Ensure the camera is in 'Custom' and adjust FOV
@@ -120,24 +118,6 @@ local function toggleFullBright(enabled)
     end
 end
 
-function findProximityPrompt()
-    local ray = Ray.new(camera.CFrame.Position, camera.CFrame.LookVector * interactDistance)
-    local part, position = workspace:FindPartOnRay(ray, player.Character)
-
-    if part then
-        local prompt = part:FindFirstChildWhichIsA("ProximityPrompt", true)
-        if prompt then
-            return prompt
-        end
-    end
-    return nil
-end
-
-function interactWithPrompt(prompt)
-    if prompt and prompt.HoldDuration == 0 then
-        fireproximityprompt(prompt)
-    end
-end
 
 Rayfield:Notify({
     Title = "Window loaded",
@@ -220,12 +200,18 @@ local FOVInp = Visuals:CreateInput({
     end
 })
 
-local AutoInteractToggle = General:CreateToggle({
-    Name = "Auto Interact",
+local InteractThruWallsToggle = General:CreateToggle({
+    Name = "Instant Interact",
     CurrentValue = false,
-    Flag = "AITOGGLE",
+    Flag = "ITToggle",
     Callback = function(bool)
-        IsAutoInteractEnabled = bool
+        InteractThruWallsEnabled = bool
+
+        for i, v in pairs(game.Workspace:GetDescendants()) do
+            if v:IsA("ProximityPrompt") then
+                v.RequiresLineOfSight = false
+            end
+        end
     end,
 })
 
@@ -233,6 +219,12 @@ game.Workspace.DescendantAdded:Connect(function(des)
     if IsInstantInteractEnabled == true then
         if des:IsA("ProximityPrompt") then
             des.HoldDuration = 0
+        end
+    end
+
+    if InteractThruWallsEnabled == true then
+        if des:IsA("ProximityPrompt") then
+            des.RequiresLineOfSight = false
         end
     end
 
@@ -262,12 +254,3 @@ end)
 -- Start monitoring lighting changes
 monitorLighting()
 maintainCamera()
-
-while task.wait(interactionDelay) do
-    if IsAutoInteractEnabled == true then
-        local prompt = findProximityPrompt()
-        if prompt then
-            interactWithPrompt(prompt)
-        end
-    end
-end

@@ -201,9 +201,9 @@ local FOVInp = Visuals:CreateInput({
 })
 
 local InteractThruWallsToggle = General:CreateToggle({
-    Name = "Instant Interact",
+    Name = "Interact through walls",
     CurrentValue = false,
-    Flag = "ITToggle",
+    Flag = "ITWToggle",
     Callback = function(bool)
         InteractThruWallsEnabled = bool
 

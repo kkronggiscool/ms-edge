@@ -264,7 +264,7 @@ monitorLighting()
 maintainCamera()
 
 while task.wait(interactionDelay) do
-    if IsAutoInteractEnabled then
+    if IsAutoInteractEnabled == true then
         local prompt = findProximityPrompt()
         if prompt then
             interactWithPrompt(prompt)

@@ -4,6 +4,20 @@ _G.isFullBrightEnabled = false
 local IsInstantInteractEnabled = false
 local IsRemoveAllGatesEnabled = false
 local FieldOfViewVal = 70
+local camera = workspace.CurrentCamera
+
+local function maintainCamera()
+    -- Ensure the camera is in 'Custom' and adjust FOV
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if camera.CameraType == Enum.CameraType.Scriptable then
+            -- Temporarily change the CameraType to 'Custom'
+            camera.CameraType = Enum.CameraType.Custom
+            
+            -- Set the FieldOfView to simulate zooming out (increase the value to zoom out)
+            camera.FieldOfView = FieldOfViewVal  -- Adjust this to your desired zoomed-out value
+        end
+    end)
+end
 
 local Window = Rayfield:CreateWindow({
     Name = "msedge",
@@ -177,6 +191,7 @@ local FOVInp = Visuals:CreateInput({
             warn("not a number")
         else
             FieldOfViewVal = num
+            print(FieldOfViewVal)
         end
     end
 })
@@ -205,15 +220,6 @@ game:GetService("RunService").Heartbeat:Connect(function()
     if player and player.Character and player.Character:FindFirstChild("Humanoid") then
         player.Character.Humanoid.WalkSpeed = PlayerSpeed
     end
-
-    -- Camera settings, set only if needed
-    local Camera = game.Workspace.CurrentCamera
-    if Camera.CameraType ~= Enum.CameraType.Custom then
-        Camera.CameraType = Enum.CameraType.Custom
-    end
-    
-    -- Set the FieldOfView (if it needs to be updated)
-    Camera.FieldOfView = FieldOfViewVal
 end)
 
 game.Players.LocalPlayer.Character.Humanoid.HealthChanged:Connect(function()
@@ -222,3 +228,4 @@ end)
 
 -- Start monitoring lighting changes
 monitorLighting()
+maintainCamera()

@@ -215,6 +215,33 @@ local InteractThruWallsToggle = General:CreateToggle({
     end,
 })
 
+local AutoInteract = General:CreateToggle({
+    Name = "AutoInteract",
+    CurrentValue = false,
+    Flag = "AInteractToggle",
+    Callback = function(bool)
+        if bool == true then
+            task.spawn(function()
+                while AutoInteract.CurrentValue do
+                    local camera = game.Workspace.CurrentCamera
+                    for _, prompt in pairs(game:GetService("Workspace"):GetDescendants()) do
+                        if prompt:IsA("ProximityPrompt") and camera:WorldToViewportPoint(prompt.Parent.Position).Z > 0 then
+                            pcall(function()
+                                if prompt.Enabled then
+                                    prompt:InputHoldBegin()
+                                    task.wait(0.05)
+                                    prompt:InputHoldEnd()
+                                end
+                            end)
+                        end
+                    end
+                    task.wait(0.05)
+                end
+            end)
+        end
+    end,
+})
+
 game.Workspace.DescendantAdded:Connect(function(des)
     if IsInstantInteractEnabled == true then
         if des:IsA("ProximityPrompt") then

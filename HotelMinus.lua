@@ -254,3 +254,5 @@ end)
 -- Start monitoring lighting changes
 monitorLighting()
 maintainCamera()
+
+Rayfield:LoadConfiguration()

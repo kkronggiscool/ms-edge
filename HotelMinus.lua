@@ -228,17 +228,16 @@ local AutoInteract = General:CreateToggle({
                         if prompt:IsA("ProximityPrompt") and prompt.Enabled then
                             local parent = prompt.Parent
                             local position = nil
+
+                            if parent.Name == "Wardrobe" or parent.Name == "Dresser" then
+                                return
+                            end
                             
                             -- Check if the parent is a Model with a PrimaryPart or a BasePart directly
                             if parent:IsA("Model") and parent.PrimaryPart then
                                 position = parent.PrimaryPart.Position
                             elseif parent:IsA("BasePart") then
                                 position = parent.Position
-                            end
-
-                            -- Proper check for parent name
-                            if parent.Name == "Wardrobe" or parent.Name == "Dresser" then
-                                continue
                             end
 
 

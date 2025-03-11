@@ -231,22 +231,27 @@ local AutoInteract = General:CreateToggle({
                             
                             -- Check if the parent is a Model with a PrimaryPart or a BasePart directly
                             if parent:IsA("Model") and parent.PrimaryPart then
-                                position = parent.PrimaryPart   .Position
+                                position = parent.PrimaryPart.Position
                             elseif parent:IsA("BasePart") then
                                 position = parent.Position
                             end
-                            
-                            -- Trigger prompt if it's visible on the screen
+
+                            -- Proper check for parent name
+                            if parent.Name == "Wardrobe" or parent.Name == "Dresser" then
+                                continue
+                            end
+
+
                             if position and camera:WorldToViewportPoint(position).Z > 0 then
                                 pcall(function()
                                     prompt:InputHoldBegin()
-                                    task.wait(0.01)  -- Reduced delay for faster interaction
+                                    task.wait(0.01)
                                     prompt:InputHoldEnd()
                                 end)
                             end
                         end
                     end
-                    task.wait(0.01)  -- Faster scanning of the workspace
+                    task.wait(0.01)
                 end
             end)
         end

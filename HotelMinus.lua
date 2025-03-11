@@ -216,13 +216,13 @@ local InteractThruWallsToggle = General:CreateToggle({
 })
 
 local AutoInteract = General:CreateToggle({
-    Name = "AutoInteract",
+    Name = "Auto Interact",
     CurrentValue = false,
     Flag = "AInteractToggle",
     Callback = function(bool)
         if bool == true then
             task.spawn(function()
-                while AutoInteract.CurrentValue do
+                while bool == true do
                     local camera = game.Workspace.CurrentCamera
                     for _, prompt in ipairs(workspace:GetDescendants()) do
                         if prompt:IsA("ProximityPrompt") and prompt.Enabled then
@@ -231,7 +231,7 @@ local AutoInteract = General:CreateToggle({
                             
                             -- Check if the parent is a Model with a PrimaryPart or a BasePart directly
                             if parent:IsA("Model") and parent.PrimaryPart then
-                                position = parent.PrimaryPart.Position
+                                position = parent.PrimaryPart   .Position
                             elseif parent:IsA("BasePart") then
                                 position = parent.Position
                             end

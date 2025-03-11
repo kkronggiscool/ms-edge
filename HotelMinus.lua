@@ -222,7 +222,7 @@ local AutoInteract = General:CreateToggle({
     Callback = function(bool)
         if bool == true then
             task.spawn(function()
-                while AutoInteract.CurrentValue do
+                while bool == true do
                     local camera = game.Workspace.CurrentCamera
                     for _, prompt in pairs(game:GetService("Workspace"):GetDescendants()) do
                         if prompt:IsA("ProximityPrompt") and camera:WorldToViewportPoint(prompt.Parent.Position).Z > 0 then

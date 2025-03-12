@@ -230,7 +230,7 @@ local AutoInteract = General:CreateToggle({
                             local parent = prompt.Parent
                             local position = nil
 
-                            if parent.Name == "Wardrobe" or parent.Name == "Dresser" or parent.Name == "Painting_Small" or parent.Name == "Painting_Big" then
+                            if parent.Name == "Wardrobe" or parent.Name == "Dresser" or parent.Name == "Painting_Small" or parent.Name == "Painting_Big" or parent.Name == "ModulePrompt" then
                                 continue
                             end
                             
@@ -263,7 +263,7 @@ local KeyESPToggle = Visuals:CreateToggle({
     CurrentValue = false,
     Flag = "KSPToggle",
     Callback = function(bool)
-        if bool then
+        if bool == true then
             -- Enable Highlights
             for _, des in pairs(workspace:GetDescendants()) do
                 if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then

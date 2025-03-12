@@ -272,6 +272,15 @@ local KeyESPToggle = Visuals:CreateToggle({
                     Highlight.FillColor = Color3.fromRGB(0, 255, 0)
                 end
             end
+        else
+            for _, des in pairs(workspace:GetDescendants()) do
+                if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then
+                    local existingHighlight = des:FindFirstChildOfClass("Highlight")
+                    if existingHighlight then
+                        existingHighlight:Destroy()
+                    end
+                end
+            end
         end
     end,
 })

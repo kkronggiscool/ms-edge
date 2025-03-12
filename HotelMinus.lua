@@ -230,7 +230,7 @@ local AutoInteract = General:CreateToggle({
                             local position = nil
 
                             if parent.Name == "Wardrobe" or parent.Name == "Dresser" then
-                                return
+                                continue
                             end
                             
                             -- Check if the parent is a Model with a PrimaryPart or a BasePart directly
@@ -257,7 +257,30 @@ local AutoInteract = General:CreateToggle({
     end,
 })
 
+local KeyESPToggle = Visuals:CreateToggle({
+    Name = "Key ESP",
+    CurrentValue = false,
+    Flag = "KSPToggle",
+    Callback = function(bool)
+        if bool == true then
+            for _, des in pairs(workspace:GetDescendants()) do
+                if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then
+                    local Highlight = Instance.new("Highlight")
+                    Highlight.Parent = des
+                    Highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                end
+            end
+        end
+    end,
+})
+
 game.Workspace.DescendantAdded:Connect(function(des)
+    if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then
+        local Highlight = Instance.new("Highlight")
+        Highlight.Parent = des
+        Highlight.FillColor = Color3.fromRGB(0, 255, 0)
+    end
+
     if IsInstantInteractEnabled == true then
         if des:IsA("ProximityPrompt") then
             des.HoldDuration = 0

@@ -221,14 +221,18 @@ local KeyESPToggle = Visuals:CreateToggle({
     CurrentValue = false,
     Flag = "KSPToggle",
     Callback = function(bool)
-        if bool == true then
+        if bool then
             -- Enable Highlights
             for _, des in pairs(workspace:GetDescendants()) do
                 if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then
-                    local Highlight = Instance.new("Highlight")
-                    Highlight.Parent = des
-                    Highlight.Adornee = des
-                    Highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                    local existingHighlight = des:FindFirstChildOfClass("Highlight")
+                    
+                    if not existingHighlight then  -- Only create if it doesn't exist
+                        local Highlight = Instance.new("Highlight")
+                        Highlight.Parent = des
+                        Highlight.Adornee = des  -- Setting the Adornee to the Hitbox itself
+                        Highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                    end
                 end
             end
         else

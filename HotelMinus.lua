@@ -8,6 +8,7 @@ local camera = workspace.CurrentCamera
 local player = game.Players.LocalPlayer
 local camera = workspace.CurrentCamera
 local InteractThruWallsEnabled = false
+local KeyESPEnabled = false
 
 local function maintainCamera()
     -- Ensure the camera is in 'Custom' and adjust FOV
@@ -262,6 +263,7 @@ local KeyESPToggle = Visuals:CreateToggle({
     CurrentValue = false,
     Flag = "KSPToggle",
     Callback = function(bool)
+        KeyESPEnabled = bool
         if bool == true then
             for _, des in pairs(workspace:GetDescendants()) do
                 if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then
@@ -275,10 +277,12 @@ local KeyESPToggle = Visuals:CreateToggle({
 })
 
 game.Workspace.DescendantAdded:Connect(function(des)
-    if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then
-        local Highlight = Instance.new("Highlight")
-        Highlight.Parent = des
-        Highlight.FillColor = Color3.fromRGB(0, 255, 0)
+    if KeyESPEnabled then
+        if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then
+            local Highlight = Instance.new("Highlight")
+            Highlight.Parent = des
+            Highlight.FillColor = Color3.fromRGB(0, 255, 0)
+        end
     end
 
     if IsInstantInteractEnabled == true then

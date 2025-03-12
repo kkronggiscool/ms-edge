@@ -216,48 +216,6 @@ local InteractThruWallsToggle = General:CreateToggle({
     end,
 })
 
-local AutoInteract = General:CreateToggle({
-    Name = "Auto Interact",
-    CurrentValue = false,
-    Flag = "AInteractToggle",
-    Callback = function(bool)
-        if bool == true then
-            task.spawn(function()
-                while bool == true do
-                    local camera = game.Workspace.CurrentCamera
-                    for _, prompt in ipairs(workspace:GetDescendants()) do
-                        if prompt:IsA("ProximityPrompt") and prompt.Enabled then
-                            local parent = prompt.Parent
-                            local position = nil
-
-                            if parent.Name == "Wardrobe" or parent.Name == "Dresser" or parent.Name == "Painting_Small" or parent.Name == "Painting_Big" or parent.Name == "ModulePrompt" then
-                                continue
-                            end
-                            
-                            -- Check if the parent is a Model with a PrimaryPart or a BasePart directly
-                            if parent:IsA("Model") and parent.PrimaryPart then
-                                position = parent.PrimaryPart.Position
-                            elseif parent:IsA("BasePart") then
-                                position = parent.Position
-                            end
-
-
-                            if position and camera:WorldToViewportPoint(position).Z > 0 then
-                                pcall(function()
-                                    prompt:InputHoldBegin()
-                                    task.wait(0.01)
-                                    prompt:InputHoldEnd()
-                                end)
-                            end
-                        end
-                    end
-                    task.wait(0.01)
-                end
-            end)
-        end
-    end,
-})
-
 local KeyESPToggle = Visuals:CreateToggle({
     Name = "Key ESP",
     CurrentValue = false,

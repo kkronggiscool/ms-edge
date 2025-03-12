@@ -230,7 +230,7 @@ local AutoInteract = General:CreateToggle({
                             local parent = prompt.Parent
                             local position = nil
 
-                            if parent.Name == "Wardrobe" or parent.Name == "Dresser" then
+                            if parent.Name == "Wardrobe" or parent.Name == "Dresser" or parent.Name == "Painting_Small" or parent.Name == "Painting_Big" then
                                 continue
                             end
                             
@@ -263,16 +263,18 @@ local KeyESPToggle = Visuals:CreateToggle({
     CurrentValue = false,
     Flag = "KSPToggle",
     Callback = function(bool)
-        KeyESPEnabled = bool
-        if bool == true then
+        if bool then
+            -- Enable Highlights
             for _, des in pairs(workspace:GetDescendants()) do
                 if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then
                     local Highlight = Instance.new("Highlight")
                     Highlight.Parent = des
+                    Highlight.Adornee = des
                     Highlight.FillColor = Color3.fromRGB(0, 255, 0)
                 end
             end
         else
+            -- Remove Highlights
             for _, des in pairs(workspace:GetDescendants()) do
                 if des.Name == "Hitbox" and des.Parent.Name == "KeyObtain" then
                     local existingHighlight = des:FindFirstChildOfClass("Highlight")
@@ -291,6 +293,7 @@ game.Workspace.DescendantAdded:Connect(function(des)
             local Highlight = Instance.new("Highlight")
             Highlight.Parent = des
             Highlight.FillColor = Color3.fromRGB(0, 255, 0)
+            Highlight.Adornee = des
         end
     end
 
